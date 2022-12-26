@@ -31,7 +31,6 @@ jobs:
 
       - name: Get Commit Message
         id: message
-        uses: actions/github-script@v3
         env:
           FULL_COMMIT_MESSAGE: '${{ github.event.head_commit.message }}'
         run: |
