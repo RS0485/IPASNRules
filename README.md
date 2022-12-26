@@ -1,7 +1,7 @@
 # IPASNRules
 IP-ASN rules for Quantumult X and Stash
 
-### Source
+### Data Source
 [https://bgp.he.net/](https://bgp.he.net/)
 
 ### Generated

@@ -34,15 +34,13 @@ jobs:
         uses: actions/github-script@v3
         env:
           FULL_COMMIT_MESSAGE: '${{ github.event.head_commit.message }}'
-        with:
-          result-encoding: string
-          script: |
-            var message = `${process.env.FULL_COMMIT_MESSAGE}`;
-            core.info(message);
-            if (message != '') return message;
-            var time = new Date(Date.now()).toISOString();
-            core.info(time);
-            return `Generate at ${time}`;
+        run: |
+          # Set commit message to current time if FULL_COMMIT_MESSAGE is not set
+          if [[ -z "$FULL_COMMIT_MESSAGE" ]]; then
+            echo "MSG=Generated at $(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_OUTPUT
+          else
+            echo "MSG=$FULL_COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          fi
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
@@ -52,5 +50,5 @@ jobs:
           publish_dir: ./generated
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          full_commit_message: ${{ steps.message.outputs.result }}
+          full_commit_message: ${{ steps.message.outputs.MSG }}
           force_orphan: true
