@@ -61,16 +61,17 @@ def write_in_stash_format(asns, country_or_region, file_name):
     with open(file_name, 'w') as f:
         # 写入文件头
         now = datetime.datetime.now()
-        header = f"name: {country_or_region} ASNs\n" \
-                 f"desc: {country_or_region} IP-ASN rules for Stash\n" \
-                 f"author: https://github.com/RS0485/\n" \
-                 f"total: {len(asns)}\n" \
-                 f"updated: {now.strftime('%Y-%m-%d %H:%M:%S')}\n\n" \
-                 f"rules:\n"
+        header = f"# NAME: {country_or_region} ASNs\n" \
+                 f"# BEHAVIOR: classic\n" \
+                 f"# SOURCE: https://bgp.he.net/country/{country_or_region}\n" \
+                 f"# COUNT: {len(asns)}\n" \
+                 f"# REPO: https://github.com/RS0485/\n" \
+                 f"# UPDATED: {now.strftime('%Y-%m-%d %H:%M:%S')}\n\n" \
+                 f"payload:\n"
         f.write(header)
 
         for asn in asns:
-            line = f"  - IP-ASN,{asn.asn},{country_or_region}"
+            line = f'  - "IP-ASN,{asn.asn},{country_or_region}"'
             f.write(line + '\n')
 
 def gen_asn_rules(country_or_region, dir):
@@ -83,7 +84,7 @@ def gen_asn_rules(country_or_region, dir):
     asns.sort(key=lambda x: x.adjacencies_v4, reverse=True)
 
     write_in_quan_format(asns, country_or_region, f"{dir}/{country_or_region}-ASNs.list")
-    write_in_stash_format(asns, country_or_region, f"{dir}/{country_or_region}-ASNs.stoverride")
+    write_in_stash_format(asns, country_or_region, f"{dir}/{country_or_region}-ASNs.yaml")
 
 
 country_or_regions = ["CN", "HK", "US"]
